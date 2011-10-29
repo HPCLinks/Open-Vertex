@@ -1,0 +1,83 @@
+* Copyright (c) 2011  by HPC Links 
+* 
+* Permission to use, copy, modify, and distribute this software for any 
+* purpose with or without fee is hereby granted, provided that the above 
+* copyright notice and this permission notice appear in all copies. 
+* 
+* THE SOFTWARE IS PROVIDED "AS IS" AND HPC Links DISCLAIMS ALL WARRANTIES 
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+* MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL HPC Links BE LIABLE FOR 
+* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT 
+* OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+* 
+*   HPC Links 
+*   B-8, Second Floor 
+*   May Fair Garden 
+*   New Delhi, India 110016
+#!/bin/bash
+#
+# Vertex Compute init script
+#	chkconfig: 2345 80 75
+# description  Starts and stops only xcpufs
+#
+# Source function library
+. /etc/init.d/functions
+. /etc/sysconfig/vex
+HTTPD_LANG=$(HTTPD_LANG="C")
+
+XCPUNAME="xcpufs"
+XCPU="$VEXHOME/sbin/xcpufs"
+
+
+start()
+{
+echo "In start"
+if [ `id -u` != "0" ] ; then
+		echo "You need to be root to run this script"
+	exit 1
+fi
+
+if [ ! -f $XCPU ] ; then
+		echo "Please install xcpufs in $XCPU"
+	exit 1
+fi
+
+echo  "Cleaning up xcpufs running processes"
+killall $XCPUNAME >/dev/null 2>&1
+
+echo "starting $XCPU"
+$XCPU
+}
+
+stop() 
+{
+
+if [ `id -u` != "0" ] ; then
+		echo "You need to be root to run this script"
+	exit 1
+fi
+
+echo "Stopping XCPUFS"
+killall $XCPU > /dev/null 2>&1
+}
+
+#See how we are called 
+
+case "$1" in
+	start)
+			  start
+				;;
+	stop)
+				stop
+				;;
+ restart)
+ 			  stop
+				start
+				;;
+  *) 
+		 echo $"Usage $prog (start|stop|restart)"
+
+esac
+exit 1
