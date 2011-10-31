@@ -889,6 +889,8 @@ it to find libraries and programs with nonstandard names/locations.
 
 Example: ./configure --prefix=/opt/vertex --with-uidmethod=yp --with-sysrootfile=/hpc/vertex/SYSROOT
 
+Example: ./configure --prefix=/opt/vertex --with-uidmethod=yp --with-sysrootfile=/hpc/vertex/SYSROOT
+
 Report bugs to <openvertex@googlegroups.com>.
 _ACEOF
 fi

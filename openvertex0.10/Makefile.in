@@ -57,8 +57,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = rte/rtetool$(EXEEXT) \
-	vexloader/src/vex_loaderbin$(EXEEXT) \
+bin_PROGRAMS = vexloader/src/vex_loaderbin$(EXEEXT) \
 	vexsched/src/vex_hsched$(EXEEXT) \
 	vexsched/src/vex_client$(EXEEXT)
 subdir = .
@@ -81,11 +80,8 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(etcsysconfigdir)" "$(DESTDIR)$(utilsdir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-rte_rtetool_SOURCES = rte/rtetool.c
-am__dirstamp = $(am__leading_dot)dirstamp
-rte_rtetool_OBJECTS = rte/rtetool.$(OBJEXT)
-rte_rtetool_LDADD = $(LDADD)
 vexloader_src_vex_loaderbin_SOURCES = vexloader/src/vex_loaderbin.c
+am__dirstamp = $(am__leading_dot)dirstamp
 vexloader_src_vex_loaderbin_OBJECTS =  \
 	vexloader/src/vex_loaderbin.$(OBJEXT)
 vexloader_src_vex_loaderbin_LDADD = $(LDADD)
@@ -109,10 +105,10 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = rte/rtetool.c vexloader/src/vex_loaderbin.c \
-	vexsched/src/vex_client.c vexsched/src/vex_hsched.c
-DIST_SOURCES = rte/rtetool.c vexloader/src/vex_loaderbin.c \
-	vexsched/src/vex_client.c vexsched/src/vex_hsched.c
+SOURCES = vexloader/src/vex_loaderbin.c vexsched/src/vex_client.c \
+	vexsched/src/vex_hsched.c
+DIST_SOURCES = vexloader/src/vex_loaderbin.c vexsched/src/vex_client.c \
+	vexsched/src/vex_hsched.c
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -235,10 +231,9 @@ etcsysconfig_SCRIPTS = etc/vex
 etcinitdir = /etc/init.d
 etcinit_SCRIPTS = vexinit/vertex  
 utilsdir = $(prefix)/utils
-utils_SCRIPTS = utils/mkrepos utils/rsynccentos utils/tftpd
+utils_SCRIPTS = utils/clone_sysroot_image   utils/rsync-exclude
 AM_LDFLAGS = -lelf  
 bin_SCRIPTS = vexinit/openxrx	vexinit/openxrx_node vexmon/bin/vexmon.sh vexloader/bin/vex_loader
-rtetool_SOURCES = rte/rtetool.c
 vex_hsched_SOURCES = vexsched/src/vex_hsched.c
 vex_client_SOURCES = vexsched/src/vex_client.c
 SUBDIRS = xcpu2
@@ -324,17 +319,6 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-rte/$(am__dirstamp):
-	@$(mkdir_p) rte
-	@: > rte/$(am__dirstamp)
-rte/$(DEPDIR)/$(am__dirstamp):
-	@$(mkdir_p) rte/$(DEPDIR)
-	@: > rte/$(DEPDIR)/$(am__dirstamp)
-rte/rtetool.$(OBJEXT): rte/$(am__dirstamp) \
-	rte/$(DEPDIR)/$(am__dirstamp)
-rte/rtetool$(EXEEXT): $(rte_rtetool_OBJECTS) $(rte_rtetool_DEPENDENCIES) rte/$(am__dirstamp)
-	@rm -f rte/rtetool$(EXEEXT)
-	$(LINK) $(rte_rtetool_LDFLAGS) $(rte_rtetool_OBJECTS) $(rte_rtetool_LDADD) $(LIBS)
 vexloader/src/$(am__dirstamp):
 	@$(mkdir_p) vexloader/src
 	@: > vexloader/src/$(am__dirstamp)
@@ -460,7 +444,6 @@ uninstall-utilsSCRIPTS:
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f rte/rtetool.$(OBJEXT)
 	-rm -f vexloader/src/vex_loaderbin.$(OBJEXT)
 	-rm -f vexsched/src/vex_client.$(OBJEXT)
 	-rm -f vexsched/src/vex_hsched.$(OBJEXT)
@@ -468,7 +451,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@rte/$(DEPDIR)/rtetool.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@vexloader/src/$(DEPDIR)/vex_loaderbin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@vexsched/src/$(DEPDIR)/vex_client.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@vexsched/src/$(DEPDIR)/vex_hsched.Po@am__quote@
@@ -791,8 +773,6 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
-	-rm -f rte/$(DEPDIR)/$(am__dirstamp)
-	-rm -f rte/$(am__dirstamp)
 	-rm -f vexloader/src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f vexloader/src/$(am__dirstamp)
 	-rm -f vexsched/src/$(DEPDIR)/$(am__dirstamp)
@@ -807,7 +787,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf rte/$(DEPDIR) vexloader/src/$(DEPDIR) vexsched/src/$(DEPDIR)
+	-rm -rf vexloader/src/$(DEPDIR) vexsched/src/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -838,7 +818,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf rte/$(DEPDIR) vexloader/src/$(DEPDIR) vexsched/src/$(DEPDIR)
+	-rm -rf vexloader/src/$(DEPDIR) vexsched/src/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -911,10 +891,14 @@ install-exec-hook:
 	fi
 
 # Installing and depmoding 9p.ko
-
-	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p
-	install -c  9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko /lib/modules/`uname -r`/updates/kernel/fs/9p/
-	depmod -a
+#check if this is 9p kernel module
+	if test -z "`cat /proc/filesystems | grep 9p `" ; then \
+	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p ; \
+	install -c  9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko /lib/modules/`uname -r`/updates/kernel/fs/9p/ ; \
+	depmod -a	; \
+	else \
+	echo "This is 9p enabled kernel" ; \
+	fi
 
 prefix-install :
 
@@ -923,14 +907,12 @@ prefix-install :
 	mkdir -p $(prefix)/sbin
 	cp vexsched/src/vex_hsched      $(prefix)/bin
 	cp vexsched/src/vex_client      $(prefix)/bin
-	cp rte/rtetool                  $(prefix)/bin
 	cp vexloader/bin/vex_loader     $(prefix)/bin
 	cp vexmon/bin/vexmon.sh         $(prefix)/bin
 	cp vexinit/openxrx              $(prefix)/bin
 	cp vexinit/openxrx_node         $(prefix)/bin
-	cp utils/mkrepos                $(prefix)/utils
-	cp utils/rsynccentos             $(prefix)/utils
-	cp utils/tftpd                  $(prefix)/utils
+	cp utils/clone_sysroot_image     $(prefix)/utils
+	cp utils/rsync-_exclude     $(prefix)/utils
 	cp xcpu2/xcpufs/xcpufs           $(prefix)/sbin
 	cp xcpu2/xcpufs/xcpufs.static    $(prefix)/sbin
 	cp xcpu2/utils/xrx               $(prefix)/bin
@@ -966,10 +948,13 @@ other-install :
 	install -c vexinit/vertex /etc/init.d/vertex
 	ln -sf $(prefix)/bin/vex_loaderbin  /usr/bin/vrun	
 
-	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p
-	install -c 9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko  /lib/modules/`uname -r`/updates/kernel/fs/9p
-	depmod -a
-
+	if test -z "`cat /proc/filesystems | grep 9p `" ; then \
+	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p ;\
+	install -c 9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko  /lib/modules/`uname -r`/updates/kernel/fs/9p ; \
+	depmod -a ; \
+	else \
+	echo "This kernel has 9p enabled" ; \
+	fi
 uninstall :
 	rm -rf $(prefix)/bin
 	rm -rf $(prefix)/etc

@@ -40,25 +40,22 @@ etcinitdir = /etc/init.d
 
 etcinit_SCRIPTS= vexinit/vertex  
 
-utilsdir = $(prefix)/utils
+utilsdir =$(prefix)/utils
 
-utils_SCRIPTS = utils/mkrepos utils/rsynccentos utils/tftpd
+utils_SCRIPTS = utils/clone_sysroot_image   utils/rsync-exclude
 
 
 
 
 AM_LDFLAGS= -lelf  
 
-bin_PROGRAMS = rte/rtetool  vexloader/src/vex_loaderbin  vexsched/src/vex_hsched  vexsched/src/vex_client  
+bin_PROGRAMS =   vexloader/src/vex_loaderbin  vexsched/src/vex_hsched  vexsched/src/vex_client  
 
 bin_SCRIPTS=vexinit/openxrx	vexinit/openxrx_node vexmon/bin/vexmon.sh vexloader/bin/vex_loader
 
 
 
 
-
-
-rtetool_SOURCES  =  rte/rtetool.c
 
 
 vex_hsched_SOURCES =  vexsched/src/vex_hsched.c
@@ -93,10 +90,14 @@ install-exec-hook:
 	fi
 
 # Installing and depmoding 9p.ko
-
-	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p
-	install -c  9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko /lib/modules/`uname -r`/updates/kernel/fs/9p/
-	depmod -a
+#check if this is 9p kernel module
+	if test -z "`cat /proc/filesystems | grep 9p `" ; then \
+	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p ; \
+	install -c  9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko /lib/modules/`uname -r`/updates/kernel/fs/9p/ ; \
+	depmod -a	; \
+	else \
+	echo "This is 9p enabled kernel" ; \
+	fi
 
 prefix-install :
 	
@@ -105,14 +106,12 @@ prefix-install :
 	mkdir -p $(prefix)/sbin
 	cp vexsched/src/vex_hsched      $(prefix)/bin
 	cp vexsched/src/vex_client      $(prefix)/bin
-	cp rte/rtetool                  $(prefix)/bin
 	cp vexloader/bin/vex_loader     $(prefix)/bin
 	cp vexmon/bin/vexmon.sh         $(prefix)/bin
 	cp vexinit/openxrx              $(prefix)/bin
 	cp vexinit/openxrx_node         $(prefix)/bin
-	cp utils/mkrepos                $(prefix)/utils
-	cp utils/rsynccentos             $(prefix)/utils
-	cp utils/tftpd                  $(prefix)/utils
+	cp utils/clone_sysroot_image     $(prefix)/utils
+	cp utils/rsync-_exclude     $(prefix)/utils
 	cp xcpu2/xcpufs/xcpufs           $(prefix)/sbin
 	cp xcpu2/xcpufs/xcpufs.static    $(prefix)/sbin
 	cp xcpu2/utils/xrx               $(prefix)/bin
@@ -148,11 +147,14 @@ other-install :
 	install -c vexinit/vex.sh  /etc/profile.d
 	install -c vexinit/vertex /etc/init.d/vertex
 	ln -sf $(prefix)/bin/vex_loaderbin  /usr/bin/vrun	
- 
-	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p
-	install -c 9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko  /lib/modules/`uname -r`/updates/kernel/fs/9p
-	depmod -a
 
+	if test -z "`cat /proc/filesystems | grep 9p `" ; then \
+	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p ;\
+	install -c 9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko  /lib/modules/`uname -r`/updates/kernel/fs/9p ; \
+	depmod -a ; \
+	else \
+	echo "This kernel has 9p enabled" ; \
+	fi
 uninstall :
 	rm -rf $(prefix)/bin
 	rm -rf $(prefix)/etc
