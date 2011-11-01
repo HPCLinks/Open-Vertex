@@ -65,7 +65,7 @@ if [ $rc -ne  0 ] || [ "$VEXNODE" = "" ] ; then
 fi
   
 trap myexit 1 2 3 9 15
-export I_MPI_FABRICS="ofa"
+export I_MPI_FABRICS="shm:ofa"
 if [ ! -z "$LD_LIBRARY_PATH" ] ; then 
    XCPUENV="`/bin/env | /bin/egrep PMI_\|HRTC_\|I_MPI\|NLS\|TBB\|CPATH\|MPICH\|HOME\|OMP_\|OMPI_\|TMPDIR\|MALLOC\|OPAL_ | cut -f 1 -d = | tr "\n" " " `"
    export XCPUENV

@@ -757,6 +757,7 @@ installdirs-am:
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
@@ -864,7 +865,7 @@ uninstall-info: uninstall-info-recursive
 	uninstall-utilsSCRIPTS
 
 
-computenodeinstall :
+computenode-install :
 	make -C xcpu2/xcpufs install
 
 	cp vexinit/computeinit/vertex   /etc/init.d
@@ -955,20 +956,20 @@ other-install :
 	else \
 	echo "This kernel has 9p enabled" ; \
 	fi
-uninstall :
-	rm -rf $(prefix)/bin
-	rm -rf $(prefix)/etc
-	rm -rf $(configfile)/doc
-	rm -rf $(prefix)/sbin
-	rm -rf $(prefix)/utils
-	rm -rf /etc/profile.d/vex.sh
-	rm -rf /etc/sysconfig/vex
-	rm -rf /etc/init.d/vertex
-	rm -rf /usr/bin/vrun
-	rm -rf $(prefix)/include
-	rm -rf $(prefix)/lib
-	rm -rf $(prefix)/lib64
-	rm -rf $(prefix)
+#uninstall :
+#	rm -rf $(prefix)/bin
+#	rm -rf $(prefix)/etc
+#	rm -rf $(configfile)/doc
+#	rm -rf $(prefix)/sbin
+#	rm -rf $(prefix)/utils
+#	rm -rf /etc/profile.d/vex.sh
+#
+#	rm -rf /etc/init.d/vertex
+#	rm -rf /usr/bin/vrun
+#	rm -rf $(prefix)/include
+#	rm -rf $(prefix)/lib
+#	rm -rf $(prefix)/lib64
+#	rm -rf $(prefix)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -63,7 +63,7 @@ vex_hsched_SOURCES =  vexsched/src/vex_hsched.c
 vex_client_SOURCES =  vexsched/src/vex_client.c
 SUBDIRS =  xcpu2
 
-computenodeinstall :
+computenode-install :
 	make -C xcpu2/xcpufs install
 
 	cp vexinit/computeinit/vertex   /etc/init.d
@@ -155,18 +155,19 @@ other-install :
 	else \
 	echo "This kernel has 9p enabled" ; \
 	fi
-uninstall :
-	rm -rf $(prefix)/bin
-	rm -rf $(prefix)/etc
-	rm -rf $(configfile)/doc
-	rm -rf $(prefix)/sbin
-	rm -rf $(prefix)/utils
-	rm -rf /etc/profile.d/vex.sh
-	rm -rf /etc/sysconfig/vex
-	rm -rf /etc/init.d/vertex
-	rm -rf /usr/bin/vrun
-	rm -rf $(prefix)/include
-	rm -rf $(prefix)/lib
-	rm -rf $(prefix)/lib64
-	rm -rf $(prefix)
+#uninstall :
+#	rm -rf $(prefix)/bin
+#	rm -rf $(prefix)/etc
+#	rm -rf $(configfile)/doc
+#	rm -rf $(prefix)/sbin
+#	rm -rf $(prefix)/utils
+#	rm -rf /etc/profile.d/vex.sh
+##	rm -rf /etc/sysconfig/vex
+#
+#	rm -rf /etc/init.d/vertex
+#	rm -rf /usr/bin/vrun
+#	rm -rf $(prefix)/include
+#	rm -rf $(prefix)/lib
+#	rm -rf $(prefix)/lib64
+#	rm -rf $(prefix)
  
