@@ -1,0 +1,102 @@
+NAME
+	xcpufs - xcpu file system
+SYNOPSIS
+	xcpufs [-hdDs] [-p port] [-t tmpdir]
+DESCRIPTION
+	The xcpufs file system provides and interface that can be used to
+	remotely execute programs on the machine running xcpufs. 
+	
+	xcpufs presents the system's resources as files in a directory
+	hierarchy. The top level directory countains session directories for
+	each client session that has started by has not completed yet. The
+	top-level directory also contains the following files:
+
+	arch	when read this file returns a description of the architecture of
+			the computer running xcpufs. the architecture is normally just a
+			string of the cpu type.
+	clone	when opened and read by a client, xcpufs will create a new
+			session directory owned by the same client and return its name
+			as a string
+	env		access to the environment under which the xcpufs server is
+			running
+	procs	a list of the processes running on the machine
+	state	the current state of the node (intended to be used by the
+			scheduler)
+
+	Session directories contain the following files (letters in the bracket
+	indicate whether the client can read and write to the particular file):
+	argv	(rw) argument list for the current program
+	ctl		(rw) control file for client commands and status
+	exec	(rw) a deprecated file pointing to the session binary to be
+			executed (backward compatibility only, may be removed in the future)
+	env		(rw) local environment for this session
+	fs		directory containing the binary and all necessary additional
+			files pushed by the client. May include libraries and input
+			files.
+	stdin	(w)
+	stdout	(r)
+	stderr	(r) files corresponding to the standard I/O file descriptors of the
+			running binary
+	wait	(r) returns the wait status of the running process. Blocks on
+			read
+	id		(rw) session Job ID
+			
+	Xcpu(4) clients execute commands via an xcpufs server by opening the
+	clone file in the root directory of the server and reading a session ID
+	from it. The session ID corresponds to a directory in the xcpufs root
+	where the client should copy the binary, all auxillary files pertaining
+	to the current execution run and, if necessary, all libraries. The
+	client then sets up the environment and supplies the argument list for
+	the current run by writing to the "env" and "argv" files respectively.
+	The job is started by writing the command "exec" to the "exec" file.
+	The client then writes all necessary input to the "stdin" file and reads
+	the program's output from the "stdout" and "stderr" files.  Utility
+	clients such as xrx(1) wrap all the above conveniently into a single
+	user command.
+
+	Clients write commands to the "ctl" file to control the current session.
+	The "ctl" file supports the following commands:
+
+	exec [program] [cwd] 	execute the specified pogram ("xc" by default) from
+		the "fs" directory. If "cwd" is specified, the current working directory
+		is set to "cwd" (useful when running code out of a network-mounted
+		global file system). If program starts with a "/" then the binary is
+		executed directly, otherwise the full path to the session directory is
+		prepended to "program"
+	clone max sessions address list		copy the complete session
+		directory to a remote node running xcpufs(4). The argument "max
+		sessions" indicates the maximum number of copies made before
+		attempting to recursively invoke the "clone" command on the nodes
+		being copied to. "Address list" is a list of nodes and session
+		directories on those nodes. This is used in the implementation of
+		treespawn.
+	wipe	close standard I/O files for this session and send SIGTERM to
+		the running process if such exists
+	signal sig		send signal "sig" to the running process
+	type normal|persistent		set the session type. Normal sessions will
+		disappear once all files in their session directories are closed and
+		there are no more binaries running. Persistent sessions will remain
+		until explicitly "wipe"-d.
+	id	set job id for this session
+
+OPIONS
+	-d 	shot 9P debugging information
+	-D	show general debugging information
+	-h 	print help message
+	-s	do not try to suid to the user (useful when running as non-root)
+	-p port		make xcpufs listen to port "port"
+	-t tmp		set the temporary directory (where all session files are
+				stored) to "tmp"	
+
+EXAMPLES
+	The following starts up xcpufs on port 20004:
+
+		$ xcpufs -p 20004
+
+SEE ALSO
+	v9fs(5), xcpufs(4), statfs(4), xrx(1), xk(1), xps(1), xstat(1),
+	spfs(3), spclient(3), ssclient(3), strutil(3), xcpu(3)
+
+BUGS
+	No, thanks!
+

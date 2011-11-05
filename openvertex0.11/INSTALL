@@ -1,0 +1,68 @@
+Installation Instructions
+*************************
+
+On the VERTEX node do this. 
+ 
+./configure
+make
+make install
+
+Then edit /usr/local/vertex/etc/vex.conf
+  - add hostnames for the compute nodes to this file. 
+    For example n1:2:4
+    where 2 is the number of cores on the compute node n1
+
+Distribution of RSA keys to the compute nodes
+
+Before user applications can be executed remotely on compute nodes, the ssh key should be generated on vertex node and distributed to each of the compute nodes.
+
+Example:
+On vertex node (as root):
+ssh-keygen -t rsa -f admin_key
+mkdir /etc/xcpu
+cp admin_key* /etc/xcpu
+
+Once the key pair is generated, copy the key pair to each compute node at the location /etc/xcpu/
+
+
+Adding or Deleting users
+Use the standard Linux command to create/delete users. Refer example below.
+
+Example:
+Let.s say the new user id that needs to be created is .roy..  Follow steps given below on vertex node:
+
+1. Create user id
+    > useradd .u 502 .g 501 roy
+   Here the new user is added to the existing group id .501.. 
+2. Generate RSA key-pair for this user under the default /home/roy/.ssh/
+    > ssh-keygen .t rsa
+NOTE: it is important that for the new user the key pair is generated otherwise the applications executed by this user will not run on compute nodes.
+
+
+
+Then copy the tarball to your compute nodes then do this on the compute nodes.
+
+./configure 
+make 
+make computenode-install
+/etc/init.d/vertex start
+
+
+
+Then start vertex on the vertex node
+
+/etc/init.d/vertex start
+
+
+If you have a cluster of vertex nodes, you can see more details in the 
+VERTEX manual in /usr/share/doc/vertex
+
+For more information about VERTEX see 
+
+http://www.hpclinks.com/solutions/VERTEX.shtml
+
+To discuss VERTEX go to the google group 
+
+http://groups.google.com/group/openvertex
+
+

@@ -1,0 +1,32 @@
+NAME
+	xgetent - lists password or group databases from xcpu(4) nodes
+SYNOPSIS
+	xgetent [-dap] <passwd|group> [nodes]
+DESCRIPTION
+	xgetent lists the password or group databases from xcpu(4) nodes. 
+	xgetent connects to xcpufs(4) running on a node and reads the 
+	/pwent_read or /grent_read files to obtain the users and groups 
+	known to xcpufs.
+OPTIONS
+	-d			Turn on 9P debugging messages
+	-a			Display information from all nodes 
+				(requires that statfs(4) is running on 
+				localhost or is mounted on /mnt/statfs
+	-p			The port statfs is listening on. 
+				Useful if statfs is listening on a 
+				non-standard port.
+	passwd|group		passwd will return the password database in a 
+				similar format to getent.
+				group will return the group database in a
+				similar format to getent.
+	nodes			A comma-separated list of nodes in the xcpu(4) format
+EXAMPLE
+	This command will display the password database on nodes n1 to n10 and n13:
+		
+		$ xgetent passwd n[1-10],n13
+SEE ALSO
+	xcpufs(4), statfs(4), xcpu(4)
+BUGS
+	None.
+
+

@@ -1,0 +1,98 @@
+#!/bin/bash
+#* Copyright (c) 2011  by HPC Links 
+#* 
+#* Permission to use, copy, modify, and distribute this software for any 
+#* purpose with or without fee is hereby granted, provided that the above 
+#* copyright notice and this permission notice appear in all copies. 
+#* 
+#* THE SOFTWARE IS PROVIDED "AS IS" AND HPC Links DISCLAIMS ALL WARRANTIES 
+#* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+#* MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL HPC Links BE LIABLE FOR 
+#* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+#* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+#* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT 
+#* OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#* 
+#*   HPC Links 
+#*   B-8, Second Floor 
+#*   May Fair Garden 
+#*   New Delhi, India 110016
+
+# -----------------------------------------------------------------------------
+#
+#  vex_loader : This is the loader for vertex executables. 
+#   It can be registered with Linux binfmt_misc services. 
+#
+#  Author: Greg Rodgers
+#
+# -----------------------------------------------------------------------------
+myexit() {
+   ${VEXHOME}/bin/vex_client -f pid:$MYPROCESSID >/dev/null
+   exit 1
+}
+
+if [ -f /etc/sysconfig/vex ] ; then 
+   . /etc/sysconfig/vex
+else
+   echo "ERROR: $0  Missing /etc/sysconfig/vex"
+   exit 1
+fi
+
+export XCPU_SYSROOT=$VEXSYSROOT
+
+VEXBIN=$1
+shift
+# Chop off prefix if trying to execute directly from SYSROOT
+PREF="${XCPU_SYSROOT}/Linux/x86_64"
+VEXBIN=${VEXBIN#$PREF}
+
+#VEX_VERBOSE=${VEX_VERBOSE:-YES}
+VEX_VERBOSE=${VEX_VERBOSE:-NO}
+
+if [ "$VEX_VERBOSE" == "YES" ] ; then
+#  VEX_XRX_OPTS="-d -p"  #debug option to show detailed xcpu traces
+VEX_XRX_OPTS="-p"
+fi
+
+VEXPWD=${VEXPWD:-$PWD}
+MYPROCESSID=$$
+#  Get an arbitrary node from vex scheduler (reserve)
+VEXNODE=`${VEXHOME}/bin/vex_client -r 1 $MYPROCESSID 2>/dev/null`
+rc=$?
+if [ $rc -ne  0 ] || [ "$VEXNODE" = "" ] ; then 
+   echo " VEX: No resources available"
+   exit 1
+fi
+  
+trap myexit 1 2 3 9 15
+export I_MPI_FABRICS="shm:ofa"
+if [ ! -z "$LD_LIBRARY_PATH" ] ; then 
+   XCPUENV="`/bin/env | /bin/egrep PMI_\|HRTC_\|I_MPI\|NLS\|TBB\|CPATH\|MPICH\|HOME\|OMP_\|OMPI_\|TMPDIR\|MALLOC\|OPAL_ | cut -f 1 -d = | tr "\n" " " `"
+   export XCPUENV
+   path_wrapper_file=/tmp/path_wrapper$$
+	 echo "#!/bin/bash" > $path_wrapper_file
+	 echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH\"" >>$path_wrapper_file
+	 echo "export PATH=\"$PATH:.\"" >>$path_wrapper_file
+	 echo "cd $PWD" >>$path_wrapper_file
+	 echo "$VEXBIN $@" >>$path_wrapper_file
+	 echo "exit \$?" >>$path_wrapper_file
+	 chmod 755 $path_wrapper_file
+   if [ "$VEX_VERBOSE" == "YES" ] ; then
+      echo ${VEXHOME}/bin/xrx $VEX_XRX_OPTS $VEXNODE $path_wrapper_file
+   fi
+   ${VEXHOME}/bin/xrx $VEX_XRX_OPTS $VEXNODE $path_wrapper_file
+   rc=$?
+ 	 rm $path_wrapper_file
+else
+   XCPUENV="`/bin/env | /bin/egrep PMI_\|HRTC_\|I_MPI\|NLS\|TBB\|PATH\|MPICH\|HOME\|OMP_\|OMPI_\|TMPDIR\|MALLOC\|OPAL_ | cut -f 1 -d = | tr "\n" " " `"
+   export XCPUENV
+   if [ "$VEX_VERBOSE" == "YES" ] ; then
+      echo ${VEXHOME}/bin/xrx $VEX_XRX_OPTS $VEXNODE $VEXBIN $@ 
+   fi
+   ${VEXHOME}/bin/xrx $VEX_XRX_OPTS $VEXNODE $VEXBIN $@ 
+   rc=$?
+fi
+
+#  Return the resource to the scheduler by freeing-up this PID
+${VEXHOME}/bin/vex_client -f pid:$MYPROCESSID >/dev/null
+exit $rc

@@ -1,0 +1,3 @@
+#!/bin/bash
+echo -1 >/proc/sys/fs/binfmt_misc/status
+echo ":i386:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x1e\x00::$VEXHOME/bin/vex_loader_computenode:" >/proc/sys/fs/binfmt_misc/register

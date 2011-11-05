@@ -1,0 +1,4 @@
+export VEXHOME="@prefix@"
+export VEXIDMETH="@uidmethod@"
+export VEXVAR="@configfile@"
+export VEXSYSROOT="@sysrootfile@"

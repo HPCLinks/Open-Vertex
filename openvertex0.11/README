@@ -1,0 +1,44 @@
+Welcome to Open-Vertex. 
+
+VERTEX is a hybrid HPC platform architecture where "VERTEX" control nodes
+transparently connect light-weight heterogeneous compute nodes to storage and
+system services. Open-Vertex is an open source implementation of VERTEX 
+developed by HPCLinks and maintained on github. 
+
+A subcomponent of Open-Vertex is the open source package called XCPU2.  
+Open-Vertex contains a fork of the XCPU2 because the VERTEX objectives are 
+significantly different than XCPU2 and XCPU2 maintenance has subsided. 
+We are grateful to the XCPU2 developers for giving us a strong platform to 
+start with. 
+
+VERTEX address the challenges posed by today's Hybrid HPC systems that use
+traditional CPUs as well as compute intensive processors such as GPGPUs, 
+many-core, and Cell processors on the same HPC system.  By employing a set of 
+unique features, VERTEX provides unprecedented levels of ease-of-use, 
+flexibility and scalability for commodity hybrid HPC systems. 
+
+-------------------------------------------------------------------------------
+
+About HPCLinks
+HPC Links is a unique, world-wide provider of HPC, multi-core, and cloud 
+computing systems, solutions and services.
+
+-------------------------------------------------------------------------------
+
+Credits
+
+Gregory P. Rodgers, Phd (Chief Systems Architect)
+Nikhil K Mittal (Developer)
+Syed Amjad Ali (Developer)
+Lakshman R. Malla (Project Manager)
+Ashwini K Nanda (Systems Architect)
+Kai Staats (Business Strategist)
+Gaurav Khanna (Distinguished Scientist, Applications)
+Sandhya Dwarkadas (Distinguished Scientist, Systems)
+
+
+For more information see the google group. OpenVERTEX@googlegroups.com.
+
+Thank you
+
+HPCLinks
