@@ -913,7 +913,7 @@ prefix-install :
 	cp vexinit/openxrx              $(prefix)/bin
 	cp vexinit/openxrx_node         $(prefix)/bin
 	cp utils/clone_sysroot_image     $(prefix)/utils
-	cp utils/rsync-_exclude     $(prefix)/utils
+	cp utils/rsync-exclude     $(prefix)/utils
 	cp xcpu2/xcpufs/xcpufs           $(prefix)/sbin
 	cp xcpu2/xcpufs/xcpufs.static    $(prefix)/sbin
 	cp xcpu2/utils/xrx               $(prefix)/bin

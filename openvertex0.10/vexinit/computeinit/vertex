@@ -19,8 +19,8 @@
 #!/bin/bash
 #
 # Vertex Compute init script
-#	chkconfig: 2345 80 75
-# description  Starts and stops only xcpufs
+# chkconfig: 2345 80 75
+# description:  Starts and stops only xcpufs
 #
 # Source function library
 . /etc/init.d/functions
@@ -29,7 +29,7 @@ HTTPD_LANG=$(HTTPD_LANG="C")
 
 XCPUNAME="xcpufs"
 XCPU="$VEXHOME/sbin/xcpufs"
-
+COMPUTENODECPU="`cat /proc/cpuinfo | grep  platform | cut -d: -f2 `"
 
 start()
 {
@@ -46,6 +46,16 @@ fi
 
 echo  "Cleaning up xcpufs running processes"
 killall $XCPUNAME >/dev/null 2>&1
+echo "CPU Type is "
+echo $COMPUTENODECPU
+
+if test $COMPUTENODECPU="PS3" ; then
+
+echo "Mounting /spu "
+
+mkdir -p /mnt/sandbox/spu
+fi
+
 
 echo "starting $XCPU"
 $XCPU

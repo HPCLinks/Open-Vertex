@@ -76,13 +76,13 @@ fi
 
 #hack for dhcp server 
 
-AC_MSG_CHECKING( [  dhcp server ] )
-if  test ! -f /etc/dhcpd.conf 
-then
-AC_MSG_ERROR([ dhcp server is not installed ] )
-else
-AC_MSG_NOTICE([ dhcp server is installed ])
-fi
+#AC_MSG_CHECKING( [  dhcp server ] )
+#if  test ! -f /etc/dhcpd.conf 
+#then
+#AC_MSG_ERROR([ dhcp server is not installed ] )
+#else
+#AC_MSG_NOTICE([ dhcp server is installed ])
+#fi
 
 
 #check for VEXHOM env variable

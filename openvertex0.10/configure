@@ -887,10 +887,6 @@ Some influential environment variables:
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Example: ./configure --prefix=/opt/vertex --with-uidmethod=yp --with-sysrootfile=/hpc/vertex/SYSROOT
-
-Example: ./configure --prefix=/opt/vertex --with-uidmethod=yp --with-sysrootfile=/hpc/vertex/SYSROOT
-
 Report bugs to <openvertex@googlegroups.com>.
 _ACEOF
 fi
@@ -3973,17 +3969,13 @@ fi
 
 #hack for dhcp server
 
-echo "$as_me:$LINENO: checking   dhcp server  " >&5
-echo $ECHO_N "checking   dhcp server  ... $ECHO_C" >&6
-if  test ! -f /etc/dhcpd.conf
-then
-{ { echo "$as_me:$LINENO: error:  dhcp server is not installed  " >&5
-echo "$as_me: error:  dhcp server is not installed  " >&2;}
-   { (exit 1); exit 1; }; }
-else
-{ echo "$as_me:$LINENO:  dhcp server is installed " >&5
-echo "$as_me:  dhcp server is installed " >&6;}
-fi
+#AC_MSG_CHECKING( [  dhcp server ] )
+#if  test ! -f /etc/dhcpd.conf
+#then
+#AC_MSG_ERROR([ dhcp server is not installed ] )
+#else
+#AC_MSG_NOTICE([ dhcp server is installed ])
+#fi
 
 
 #check for VEXHOM env variable
