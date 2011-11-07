@@ -1,3 +1,0 @@
-echo ":ppc:M::\x7fELF\x01\x02\x01\x00::$VEXHOME/bin/vex_loaderbin:" >/proc/sys/fs/binfmt_misc/register
-echo ":ppc64:M::\x7fELF\x02\x02\x01\x00::$VEXHOME/bin/vex_loaderbin:" >/proc/sys/fs/binfmt_misc/register
-fi

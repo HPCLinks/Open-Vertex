@@ -1,2 +1,0 @@
-#!/bin/bash
-echo ":i686:M::\x5fRTE\x01\x02\x01\x00::$VEXHOME/bin/vex_loaderbin:" >/proc/sys/fs/binfmt_misc/register
