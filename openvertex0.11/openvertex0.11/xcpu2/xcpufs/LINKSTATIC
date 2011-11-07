@@ -1,0 +1,3 @@
+#!/bin/sh
+echo This script is for linking statically on Linux. 
+cc -static -o xcpufs -Wall -g -I ../include -DSYSNAME=Linux file.o pipe.o proc-Linux.o tspawn.o ufs.o xauth.o xcpufs.o  -g -L../libstrutil -lstrutil -L../libspclient -lspclient -L../libspfs -lspfs -L../libxauth -lxauth -lcrypto /usr/lib/libdl.a

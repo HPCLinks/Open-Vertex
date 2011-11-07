@@ -1,0 +1,4 @@
+#define XCPU_PORT	6668
+#define STAT_PORT	20003
+#define XBOOT_PORT	20002
+#define XGET_PORT	20004

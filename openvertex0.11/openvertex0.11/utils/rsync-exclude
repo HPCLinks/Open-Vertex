@@ -1,0 +1,15 @@
+/dev
+/tmp
+/proc
+/var/lock
+/var/run
+/var/tmp
+/media
+/sys
+/lost+found
+/mnt
+/root
+/home
+/lib/modules/2.6.18-194.el5
+/lib/modules/2.6.18-238.12.1.el5
+/lib/modules/2.6.18-238.12.1.el5.9p

@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+#  This is used to clone a compute node image as the SYSROOT filesystem
+#
+# Note this is the default location for keeping SYSROOT on vertex node. If the user
+# has specified a different location then this should be changed accordingly.
+
+FROMMACHINE="root@gpublade:/" 
+SYSROOT="/var/vertex/SYSROOT/Linux/x86_64"
+
+echo rsync -e ssh -a --stats --progress --delete-after --exclude-from=/home/vertex/svn/vertex/utils/rsync-exclude $FROMMACHINE  $SYSROOT/
+rsync -e ssh -a --stats --progress --delete-after --exclude-from=/home/vertex/svn/vertex/utils/rsync-exclude $FROMMACHINE $SYSROOT/
+mkdir -p $SYSROOT/dev 
+mkdir -p $SYSROOT/tmp
+mkdir -p $SYSROOT/proc
+mkdir -p $SYSROOT/var/lock
+mkdir -p $SYSROOT/var/run
+mkdir -p $SYSROOT/media
+mkdir -p $SYSROOT/sys
+mkdir -p $SYSROOT/mnt
+mkdir -p $SYSROOT/root
+mkdir -p $SYSROOT/home
+chmod 777 $SYSROOT/tmp

@@ -1,0 +1,4 @@
+export VEXHOME="/usr/local/vertex"
+export VEXIDMETH="local"
+export VEXVAR="/var/vertex"
+export VEXSYSROOT="/var/vertex/SYSROOT"

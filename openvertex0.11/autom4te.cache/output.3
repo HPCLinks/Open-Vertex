@@ -3977,6 +3977,44 @@ fi
 #AC_MSG_NOTICE([ dhcp server is installed ])
 #fi
 
+#check for openssl-devel 
+
+#This is poor hack need to do with rpm , but rpm may not be installed on end user and this assumes default location of openssl# is /usr
+echo "$as_me:$LINENO: checking   openssl-devel  " >&5
+echo $ECHO_N "checking   openssl-devel  ... $ECHO_C" >&6
+if  test ! -f /usr/include/openssl/opensslconf.h
+then
+{ { echo "$as_me:$LINENO: error:  Please install openssl-devel by executing yum install openssl-devel   " >&5
+echo "$as_me: error:  Please install openssl-devel by executing yum install openssl-devel   " >&2;}
+   { (exit 1); exit 1; }; }
+else
+{ echo "$as_me:$LINENO:  openssl-devel is installed " >&5
+echo "$as_me:  openssl-devel is installed " >&6;}
+fi
+
+
+
+
+
+
+
+
+#check for libelf
+
+#This is poor hack need to do with rpm , but rpm may not be installed on end user and this assumes default location of openssl# is /usr
+echo "$as_me:$LINENO: checking   libelf  " >&5
+echo $ECHO_N "checking   libelf  ... $ECHO_C" >&6
+if  test ! -f /usr/lib/libelf.so 
+then
+{ { echo "$as_me:$LINENO: error:  Please install elfutils-libelf-devel by using yum install elfutils-libelf-devel   " >&5
+echo "$as_me: error:  Please install elfutils-libelf-devel by using yum install elfutils-libelf-devel   " >&2;}
+   { (exit 1); exit 1; }; }
+else
+{ echo "$as_me:$LINENO:  libelf is installed " >&5
+echo "$as_me:  libelf is installed " >&6;}
+fi
+
+
 
 #check for VEXHOM env variable
 #echo $prefix

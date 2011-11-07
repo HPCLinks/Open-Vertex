@@ -1,0 +1,52 @@
+NAME
+	xrx - execute commands on xcpu(4) nodes
+SYNOPSIS
+	xrx [-dhlsaLp] [-e exec] [-n sessions] [-j jobid] [-c cwd] [-J jobid] nodes program
+DESCRIPTION
+	xrx executes a binary on an xcpu(4) node or attaches to a session already in progress.
+	The remote node where the job is to execute should be running xcpufs(4). Xrx will execute
+	the command "program" on the set of nodes specified by "nodes", which should be given
+	in the xcpu(4) format. 
+
+	If "program" is a binary it will be copied to the remote machine
+	(together with all libraries it depends on, if the -s switch is given). If "program" is a 
+	directory, all contents of the directory will be copied and the file name supplied with -e
+	will be executed.
+
+	The standard I/O of xrx becomes the standard I/O of the executing program so piping to and from
+	xrx works. If the name of the program to be executed is not absolute xrx will attempt to execute
+	a binary of that name found in one of the directories listed in the PATH environment variable.
+
+	Attempting to execute a binary on a computer of a different architecture than the local node
+	will attempt to copy a binary located in XCPU_SYSROOT/arch, where arch is the architecture as
+	reported by the remote machine.
+
+OPTIONS
+	-h			Display help information
+	-d			Turn on 9P debugging messages
+	-l			Do not copy a binary to the remote nodes, instead execute one from the local filesystem there
+	-s			Copy shared libraries used by the binary
+	-a			Copy to all nodes that are reported "up" by statfs(4). Requires statfs(4) to be running locally or mounted in /mnt/statfs
+	-L			Buffer output by lines
+	-p			Prepend the originating node name to each line of output
+	-e exec		Specify a binary to execute when copying a directory to a remote node
+	-n sessions	Control the maximum numbers of nodes a single node is allowed to treespawn to
+	-c cwd		Switch the current working directory on the remote node
+	-j jobid	Set the job ID of the executing session
+	-J jobid	Attach to sessions with the specified job ID already running on the remote nodes
+	nodes		A comma-separated list of nodes in the xcpu(4) format
+	program		The name of the executable or a directory where the executable and any related libraries and input files are stored.
+EXAMPLE
+	This command will connect to port 20002 on server "server" and list hosts n1 to n10 and n13:
+		
+		$ xrx n[1-10],n13 date
+
+ENVIRONMENT
+	XCPU_SYSROOT	The root directory where cross-architecture binaries are put
+	XCPUENV			Create a local environment file for this session
+	PATH			List of directories to search for binaries
+SEE ALSO
+	xcpufs(4), statfs(4), xps(1), xstat(1), xk(1), xcpu(4)
+BUGS
+	None.
+

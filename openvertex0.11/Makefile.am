@@ -40,7 +40,7 @@ etcinitdir = /etc/init.d
 
 etcinit_SCRIPTS= vexinit/vertex  
 
-utilsdir =$(prefix)/utils
+utilsdir =$(prefix)/sbin
 
 utils_SCRIPTS = utils/clone_sysroot_image   utils/rsync-exclude
 
@@ -69,6 +69,14 @@ computenode-install :
 	cp vexinit/computeinit/vertex   /etc/init.d
 	cp etc/vex  /etc/sysconfig
 
+# Modulear apporach on compute node
+	if test -z "`cat /proc/filesystems | grep 9p `" ; then \
+	mkdir -p /lib/modules/`uname -r`/updates/kernel/fs/9p ; \
+	install -c  9pkernelmodule/Centos/5.6/`arch`/`uname -r`/9p.ko /lib/modules/`uname -r`/updates/kernel/fs/9p/ ; \
+	depmod -a       ; \
+	else \
+	echo "This is 9p enabled kernel" ; \
+	fi
 install-exec-hook:
 
 # Vrun soft link
@@ -99,6 +107,14 @@ install-exec-hook:
 	echo "This is 9p enabled kernel" ; \
 	fi
 
+#Copying doc to /usr/share/doc/vertex
+
+	mkdir -p /usr/share/doc/vertex
+	install -c   doc/OpenVertex_SysAdmin_Guide_0.1.pdf  /usr/share/doc/vertex/
+
+#Not sure if this is required 
+	
+	chmod -R 755 $(prefix)
 prefix-install :
 	
 	mkdir -p  $(prefix)/bin
@@ -110,8 +126,8 @@ prefix-install :
 	cp vexmon/bin/vexmon.sh         $(prefix)/bin
 	cp vexinit/openxrx              $(prefix)/bin
 	cp vexinit/openxrx_node         $(prefix)/bin
-	cp utils/clone_sysroot_image     $(prefix)/utils
-	cp utils/rsync-exclude     $(prefix)/utils
+	cp utils/clone_sysroot_image     $(prefix)/sbin
+	cp utils/rsync-exclude     $(prefix)/sbin
 	cp xcpu2/xcpufs/xcpufs           $(prefix)/sbin
 	cp xcpu2/xcpufs/xcpufs.static    $(prefix)/sbin
 	cp xcpu2/utils/xrx               $(prefix)/bin

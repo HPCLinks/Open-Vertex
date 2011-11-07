@@ -1,0 +1,103 @@
+NAME
+	xcpu - the xcpu cluster management framework
+DESCRIPTION
+	xcpu is a suite for accessing resources, executing jobs and managing
+	nodes in a cluster configuration. Xcpu contains a set of servers running
+	on remote nodes or a head node and a set of client programs and
+	libraries which can be used to communicate with the servers or write
+	applications that access them. 
+	
+	Xcpu servers and clients use the 9P protocol to communicate with each
+	other. All xcpu servers present their resources as files, essentially 
+	acting as user-level file servers. The files can either be accessed 
+	via the network or mounted locally using v9fs(5).
+
+	A client starts a session on an xcpu node by opening and reading from
+	the "/clone" file served by xcpufs. The string read from the clone file
+	contains the name of a newly created directory within that file server.
+	The client then copies all binaries, libraries and input files
+	pertaining to that session to the subdirectory called "fs/" within the
+	session directory. If necessary, the client sets up the environment for
+	the new process by writing to the "env" file in the session directory.
+	The end step is to write the "exec" command which will execute the
+	binary. The client then proceeds to write to the "stdin" file and to
+	read from "stdout" and "stderr", which correspond to the newly started
+	process' standard I/O file descriptors. When a session is completed and
+	no clients are holding any files open, the session directory will be
+	removed from the file server, together with any remaining files copied
+	from the client or created by the executing process.
+
+	An xcpu client can control one or more processes running
+	on one or more nodes if more than a single node was specified
+	as the target address for the new session. Clients specify
+	one or more nodes for accessing using a comma-separated
+	nodeset description. The format of a nodeset description
+	is simply a comma-separated list of the node names/ip
+	addresses of the nodes to access, or a name followed by a
+	square bracketed list of digits to be expanded. For example
+	"node[1-10]" expands to "node1,node2,...,node10".
+
+	All file servers in xcpu can be mounted by clients with the
+	appropriate permissions. They can also be mounted in the
+	local file system via the v9fs(5) kernel module. Clients
+	can mount remote nodes via a Plan 9-like "session address"
+	specifier. The format of the session address is [tcp!]node[!port]
+	where the 'tcp' string can be omitted and if !port is not
+	specified the default will be used.
+
+	Listed below are the main components of xcpu:
+
+	Xcpufs(4)	The main file server running on computational nodes. Xcpufs
+				is the only daemon that clients interface with to start
+				jobs, manage or obtain the status of a machine in an xcpu
+				cluster.
+
+	Statfs(4)	File server which provides access to the status of a set
+				of remote nodes.
+
+	Spfs(3)		Library for creating 9P file servers.
+
+	Spclient(3)	Library for connecting to and operating on 9P file
+				servers.
+
+	Xcpu(3)		Library for connecting to and executing commands on xcpufs(4)
+				servers
+
+	Strutil(3)	Helper library for manipulating strings
+
+	Xrx(1)		Run commands on xcpufs(4) servers
+
+	Xk(1)		Send signals to processes and jobs running on xcpufs(4) servers
+
+	Xps(1)		Show processes running on remote nodes
+
+	Xstat(1)	Show status of remote nodes
+
+COMPILING AND INSTALLATION
+	Xcpu file servers and utilities should compile on all UNIX and UNIX-like
+	systems. If you're compiling xcpu for a non-Linux system you should
+	compile and install libelf(3) from the GNU repository.
+
+EXAMPLE
+	To start xcpufs on a machine named mach1:
+
+		$ xcpufs &
+
+	To execute a simple command on machines named "node1" through "node10":
+
+		$ xrx mach1 date
+
+SEE ALSO
+	v9fs(5), xcpufs(4), statfs(4), xrx(1), xk(1), xps(1), xstat(1),
+	spfs(3), spclient(3), ssclient(3), strutil(3), xcpu(3)
+
+ADDITIONAL DOCUMENTATION
+	The 9P protocol description: http://cm.bell-labs.com/sys/man/5/INDEX.html
+
+	The v9fs project: http://v9fs.sourceforge.net
+
+	Libelf: http://directory.fsf.org/libelf.html
+
+BUGS
+	There are no known bugs in xcpu :)
+
