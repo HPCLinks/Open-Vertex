@@ -916,7 +916,9 @@ install-exec-hook:
 
 #Not sure if this is required 
 
-	chmod -R 755 $(prefix)
+	chmod -R a+x $(prefix)/bin
+	chmod -R a+x $(prefix)/sbin
+	chmod -R a+x $(configfile)/etc
 prefix-install :
 
 	mkdir -p  $(prefix)/bin

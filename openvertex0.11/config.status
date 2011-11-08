@@ -510,12 +510,12 @@ s,@INSTALL_DATA@,${INSTALL} -m 644,;t t
 s,@CYGPATH_W@,echo,;t t
 s,@PACKAGE@,vertex,;t t
 s,@VERSION@,0.10,;t t
-s,@ACLOCAL@,${SHELL} /home/amjad/svn/vertex/missing --run aclocal-1.9,;t t
-s,@AUTOCONF@,${SHELL} /home/amjad/svn/vertex/missing --run autoconf,;t t
-s,@AUTOMAKE@,${SHELL} /home/amjad/svn/vertex/missing --run automake-1.9,;t t
-s,@AUTOHEADER@,${SHELL} /home/amjad/svn/vertex/missing --run autoheader,;t t
-s,@MAKEINFO@,${SHELL} /home/amjad/svn/vertex/missing --run makeinfo,;t t
-s,@install_sh@,/home/amjad/svn/vertex/install-sh,;t t
+s,@ACLOCAL@,${SHELL} /home/amjad/overtex0.11/missing --run aclocal-1.9,;t t
+s,@AUTOCONF@,${SHELL} /home/amjad/overtex0.11/missing --run autoconf,;t t
+s,@AUTOMAKE@,${SHELL} /home/amjad/overtex0.11/missing --run automake-1.9,;t t
+s,@AUTOHEADER@,${SHELL} /home/amjad/overtex0.11/missing --run autoheader,;t t
+s,@MAKEINFO@,${SHELL} /home/amjad/overtex0.11/missing --run makeinfo,;t t
+s,@install_sh@,/home/amjad/overtex0.11/install-sh,;t t
 s,@STRIP@,,;t t
 s,@ac_ct_STRIP@,,;t t
 s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t
@@ -523,7 +523,7 @@ s,@mkdir_p@,mkdir -p --,;t t
 s,@AWK@,gawk,;t t
 s,@SET_MAKE@,,;t t
 s,@am__leading_dot@,.,;t t
-s,@AMTAR@,${SHELL} /home/amjad/svn/vertex/missing --run tar,;t t
+s,@AMTAR@,${SHELL} /home/amjad/overtex0.11/missing --run tar,;t t
 s,@am__tar@,${AMTAR} chof - "$$tardir",;t t
 s,@am__untar@,${AMTAR} xf -,;t t
 s,@CXX@,g++,;t t

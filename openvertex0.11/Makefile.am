@@ -113,8 +113,10 @@ install-exec-hook:
 	install -c   doc/OpenVertex_SysAdmin_Guide_0.1.pdf  /usr/share/doc/vertex/
 
 #Not sure if this is required 
-	
-	chmod -R 755 $(prefix)
+
+	chmod -R a+x $(prefix)/bin
+	chmod -R a+x $(prefix)/sbin
+	chmod -R a+x $(configfile)/etc
 prefix-install :
 	
 	mkdir -p  $(prefix)/bin

@@ -887,6 +887,7 @@ Some influential environment variables:
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
+Example: ./configure --prefix=/opt/vertex --with-uidmethod=yp --with-sysroot=/hpc/vertex/SYSROOT
 Report bugs to <openvertex@googlegroups.com>.
 _ACEOF
 fi
