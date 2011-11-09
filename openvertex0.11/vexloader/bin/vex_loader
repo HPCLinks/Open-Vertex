@@ -73,6 +73,7 @@ if [ ! -z "$LD_LIBRARY_PATH" ] ; then
 	 echo "#!/bin/bash" > $path_wrapper_file
 	 echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH\"" >>$path_wrapper_file
 	 echo "export PATH=\"$PATH:.\"" >>$path_wrapper_file
+   echo "ulimit -s unlimited" >>$path_wrapper_file
 	 echo "cd $PWD" >>$path_wrapper_file
 	 echo "$VEXBIN $@" >>$path_wrapper_file
 	 echo "exit \$?" >>$path_wrapper_file
